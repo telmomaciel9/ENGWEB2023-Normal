@@ -1,0 +1,47 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-teal
+            h1 Registo da planta com o id #{planta._id}
+    .w3-container
+        table.w3-table-all
+            tr
+                th ID
+                th Número de Registo
+                th Código de rua
+                th Rua
+                th Local
+                th Freguesia
+                th Espécie
+                th Nome científico
+                th Origem
+                th Data de plantação
+                th Estado
+                th Caldeira
+                th Tutor
+                th Implantação
+                th Gestor
+                th Data de actualização
+                th Número de intervenções
+            tr
+                td=planta._id
+                td=planta.Número_de_Registo
+                td=planta.Código_de_rua
+                td=planta.Rua
+                td=planta.Local
+                td=planta.Freguesia  
+                td=planta.Espécie
+                td=planta.Nome_científico
+                td=planta.Origem
+                td=planta.Data_de_plantação 
+                td=planta.Estado 
+                td=planta.Caldeira 
+                td=planta.Tutor 
+                td=planta.Implantação
+                td=planta.Gestor
+                td=planta.Data_de_actualização 
+                td=planta.Número_de_intervenções
+        p
+            a(href="/") Voltar à pagina inicial
+

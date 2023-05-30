@@ -1,0 +1,86 @@
+Para a persistência de dados a base de dados utilizada foi o MongoDB.
+Os dados estão contidos na base de dados denomeada `plantas`, na coleção `plantas`.
+
+# Exercício 1
+
+# Setup da base de dados -> Exercício 1.1
+
+Para começar o setup da base de dados analisei o dataset fornecido e reparei que os campos Id não estavam como era suposto e fiz a alteração para _id.
+De seguida retirei todos os espaços dos campos que os continham, por exemplo "Número de Registo" passou para "Número_de_Registo", isto em todos os campos do dataset.
+Por fim, dei import do dataset para o MongoDB com o seguinte comando: <mongoimport plantas.json -d plantas -c plantas --drop --jsonArray>
+Obtivemos o seguinte resultado:
+2023-05-30T16:04:00.135+0100	connected to: mongodb://localhost/
+2023-05-30T16:04:00.136+0100	dropping: plantas.plantas
+2023-05-30T16:04:00.922+0100	29617 document(s) imported successfully. 0 document(s) failed to import.
+
+O que significa que existem 29617 entradas no dataset e foram todas importadas com sucesso.
+
+
+# Queries MondoDB -> Exercício 1.2
+
+1. Quantos registros estão na base de dados:
+
+    db.plantas.countDocuments()
+
+2. Quantos registros de plantação se encontram na freguesia "São Domingos de Rana":
+
+    db.plantas.count({ "Freguesia": "São Domingos de Rana" })
+
+3. Qual a lista de freguesias (ordenada alfabeticamente e sem repetições):
+
+    db.plantas.distinct("Freguesia").sort()
+
+4. Qual a distribuição dos registros por freguesia (quantos registros em cada freguesia):
+
+    db.plantas.aggregate([
+      {
+        $group: {
+          _id: "$Freguesia",
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+5. Qual a distribuição dos registros por espécie:
+
+    db.plantas.aggregate([
+      {
+        $group: {
+          _id: "$Espécie",
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+# API de dados -> Exercício 1.3
+
+Comecei por criar um projeto express com <npx express-generator> e instalar as dependências com <npm install>
+De seguida fiz <npm i mongoose --save>
+
+Para poder utilizar o mongoose no projeto foi necessario adicionar as seguintes linhas ao app.js:
+
+var mongoose = require("mongoose");
+var mongoDB = "mongodb://127.0.0.1/plantas";
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error..."));
+db.on("open", function () {
+    console.log("Conexão ao MongoDB realizada com sucesso...");
+});
+
+Foram criadas também as pastas controllers e models que eram necessárias à nossa implementação da aplicação.
+
+Foi trocada a porta da API de dados para 15030
+
+Para executar a aplicação desenvolvida basta escrever <npm start>
+
+# Exercício 2
+
+Comecei por criar um projeto express com <npx express-generator --view=pug> e instalar as dependências com <npm install>
+De seguida fiz <npm i axios --save>
+
+Foi trocada a porta da API de dados para 15031
+
+Para executar a aplicação desenvolvida basta escrever <npm start>, de notar que a aplicação desenvolvida no exercício 1 deve estar a correr ao mesmo tempo.
+
+Para a interface foi usada a stylesheet w3.css
